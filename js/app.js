@@ -118,7 +118,8 @@ document.addEventListener('DOMContentLoaded', () => {
   initAnimations(lenis);
   initTerminal();
   initTokenCounters();
-  initMagneticButtons();
+  /* Magnetic cursor-follow disabled — buttons stay put, hover effects only. */
+  /* initMagneticButtons(); */
   initRipples();
   initLogoEasterEgg();
   initCardTilt();

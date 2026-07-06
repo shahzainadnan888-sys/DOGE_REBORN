@@ -38,12 +38,20 @@ function initAnimations(lenis) {
   });
 
   /* ---- Hero entrance timeline ---- */
+  /* On mobile the hero is a single centred column, so the mascot must rise &
+     fade in (no horizontal slide) to stay perfectly centred. Desktop keeps its
+     original slide-in from the right. */
+  var heroIsMobile = window.matchMedia('(max-width: 899px)').matches;
   const heroTl = gsap.timeline({ defaults: { ease: 'power3.out' } });
   heroTl
     .from('.hero__title-line', { y: 80, opacity: 0, stagger: 0.15, duration: 1 })
     .from('.hero__subtitle', { y: 30, opacity: 0, duration: 0.8 }, '-=0.5')
     .from('.hero__ctas .btn', { y: 40, opacity: 0, stagger: 0.1, duration: 0.7 }, '-=0.4')
-    .from('.hero__mascot-wrap', { x: 100, opacity: 0, scale: 0.8, duration: 1.2 }, '-=1')
+    .from('.hero__mascot-wrap',
+      heroIsMobile
+        ? { y: 60, opacity: 0, scale: 0.92, duration: 1.2 }
+        : { x: 100, opacity: 0, scale: 0.8, duration: 1.2 },
+      '-=1')
     .from('.hero__scroll-hint', { opacity: 0, y: 20, duration: 0.6 }, '-=0.3');
 
   /* ---- Hero scroll: zoom + parallax depth layers ---- */
@@ -68,8 +76,8 @@ function initAnimations(lenis) {
   if (heroMascot) {
     gsap.to(heroMascot, {
       y: -80,
-      x: 40,
-      rotation: 5,
+      x: heroIsMobile ? 0 : 40,
+      rotation: heroIsMobile ? 0 : 5,
       ease: 'none',
       scrollTrigger: {
         trigger: '.hero',

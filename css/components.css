@@ -313,10 +313,15 @@
   text-transform: uppercase;
   padding: 0.85rem 1.75rem;
   border-radius: 50px;
+  /* Reserve a consistent border on every variant so primary / secondary /
+     ghost end up exactly the same height and line up perfectly. */
+  border: 1.5px solid transparent;
+  box-sizing: border-box;
   position: relative;
   overflow: hidden;
   transition: transform 0.3s var(--ease-out-expo), box-shadow 0.3s;
   white-space: nowrap;
+  vertical-align: middle;
 }
 
 .btn--primary {
@@ -358,7 +363,7 @@
 .btn--ghost {
   background: var(--bg-glass);
   color: var(--text-primary);
-  border: 1px solid var(--border-subtle);
+  border: 1.5px solid var(--border-subtle);
   backdrop-filter: blur(8px);
 }
 
@@ -368,17 +373,16 @@
   transform: translateY(-2px);
 }
 
+/* Static glow — no continuous pulsing/floating. Brightens only on hover. */
 .btn--glow {
-  animation: btn-pulse 3s ease-in-out infinite;
+  box-shadow: 0 0 24px var(--glow-orange);
 }
-
-@keyframes btn-pulse {
-  0%, 100% { box-shadow: 0 0 20px var(--glow-orange); }
-  50% { box-shadow: 0 0 40px var(--glow-orange), 0 0 60px var(--glow-gold); }
+.btn--glow:hover {
+  box-shadow: 0 0 40px var(--glow-orange), 0 0 60px var(--glow-gold);
 }
 
 .btn--magnetic {
-  will-change: transform;
+  will-change: auto;
 }
 
 .btn__ripple {

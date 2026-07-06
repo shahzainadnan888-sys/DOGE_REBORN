@@ -31,6 +31,11 @@ html {
   font-size: 16px;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  /* Clip sideways overflow at the root (e.g. the tilted .char-band which is
+     118% wide) so there is never a horizontal scrollbar knocking the layout
+     off-centre. `clip` doesn't create a scroll container, so Lenis/vertical
+     scroll and sticky positioning are unaffected. */
+  overflow-x: clip;
 }
 
 html.lenis, html.lenis body {
