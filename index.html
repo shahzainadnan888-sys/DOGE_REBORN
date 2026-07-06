@@ -4,7 +4,7 @@
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
   <title>Doge Reborn — The Last Doge</title>
-  <meta name="description" content="39 characters. Infinite possibilities. Doge Reborn carries the OG meme spirit into a new generation. Built on BNB Chain. Zero tax."/>
+  <meta name="description" content="Doge Reborn carries the OG meme spirit into a new generation. Built on BNB Chain. Zero tax."/>
   <meta name="theme-color" content="#050810"/>
 
   <link rel="icon" type="image/png" href="assets/doge-logo.png"/>
@@ -25,7 +25,7 @@
 
   <!-- Hero background motion + creative holographic coin (kept here in index.html) -->
   <style>
-    /* ===== Living hero background: slow, smooth cinematic drift ===== */
+    /* ===== Living hero background: slow, smooth cinematic drift (original) ===== */
     .hero__bg-layer img {
       animation: hero-bg-drift 34s ease-in-out infinite alternate;
       will-change: transform;
@@ -35,6 +35,106 @@
       50%  { transform: scale(1.16) translate3d(-2.2%, -1.6%, 0); }
       100% { transform: scale(1.09) translate3d(2.2%, 1.1%, 0); }
     }
+
+    /* ===== Tokenomics: let the section grow & flow so the "Total Supply" line
+       never collides with the cards on shorter screens (was centered + clipped). ===== */
+    .tokenomics {
+      flex-direction: column;
+      justify-content: center;
+      align-items: stretch;
+      padding-block: clamp(4rem, 8vw, 7rem);
+    }
+
+    /* ===== Hero heading — all yellow ===== */
+    .hero__title-line,
+    .hero__title-line--accent {
+      background: linear-gradient(180deg, #ffe45c 0%, #ffc529 55%, #ffa916 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      filter: drop-shadow(0 0 34px rgba(255, 200, 60, 0.5));
+    }
+
+    /* ===== Tilted scrolling character strips (mame-style) =====
+       Large character panels sitting edge-to-edge with only a thin black gap
+       between them, on a black band, so there is almost no empty space. */
+    .char-band {
+      transform: rotate(-4deg);
+      width: 118%;
+      margin-left: -9%;
+      padding: 1.15rem 0;
+      background: #05070d;   /* the thin gaps between panels read as black, like mame */
+    }
+    .char-band--alt { transform: rotate(3deg); }
+
+    .char-band__track { gap: 6px; }
+
+    .char-band__item {
+      width: auto;
+      aspect-ratio: 1 / 1;
+      height: clamp(150px, 20vw, 240px);
+      border: none;
+      border-radius: 6px;
+      overflow: hidden;
+      transition: transform 0.35s ease, box-shadow 0.35s ease;
+    }
+    .char-band__item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .char-band__item:hover {
+      transform: translateY(-6px) scale(1.04);
+      box-shadow: 0 14px 34px rgba(0, 0, 0, 0.6), 0 0 22px var(--glow-cyan);
+      z-index: 2;
+    }
+
+    /* ===== Full-screen page loader (Doge logo + spinner) ===== */
+    #loader {
+      position: fixed;
+      inset: 0;
+      z-index: 100000;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 1.4rem;
+      background: #05070d;
+      transition: opacity 0.6s ease, visibility 0.6s ease;
+    }
+    body:not(.is-loading) #loader {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+    .loader__logo {
+      width: clamp(110px, 16vw, 150px);
+      height: auto;
+      filter: drop-shadow(0 0 26px rgba(0, 229, 255, 0.45));
+      animation: loader-bob 2.4s ease-in-out infinite;
+    }
+    @keyframes loader-bob {
+      0%, 100% { transform: translateY(0) scale(1); }
+      50%      { transform: translateY(-10px) scale(1.04); }
+    }
+    .loader__spinner {
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      border: 3px solid rgba(255, 255, 255, 0.12);
+      border-top-color: var(--accent-gold, #ffc843);
+      animation: loader-spin 0.9s linear infinite;
+    }
+    @keyframes loader-spin { to { transform: rotate(360deg); } }
+    .loader__text {
+      font-family: var(--font-body, sans-serif);
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      color: #9aa4b2;
+    }
+    .loader__text span { color: var(--accent-cyan, #00e5ff); }
 
     /* ===== Creative hero emblem: holographic Doge coin with orbiting rings ===== */
     .hero__coin-stage {
@@ -155,11 +255,20 @@
       .hero__coin,
       .hero__coin-glow,
       .hero__coin-orbit,
-      .hero__coin-face::after { animation: none; }
+      .hero__coin-face::after,
+      .loader__logo,
+      .loader__spinner { animation: none; }
     }
   </style>
 </head>
-<body id="top">
+<body id="top" class="is-loading">
+
+  <!-- ===== PAGE LOADER ===== -->
+  <div id="loader" aria-hidden="true">
+    <img src="assets/doge-logo.png" alt="Doge Reborn" class="loader__logo" width="150" height="150"/>
+    <div class="loader__spinner"></div>
+    <p class="loader__text">Loading<span>...</span></p>
+  </div>
 
   <!-- Global Overlays -->
   <div class="noise-overlay" aria-hidden="true"></div>
@@ -176,7 +285,7 @@
       <ul class="nav__links">
         <li><a href="#story" class="nav__link">Story</a></li>
         <li><a href="#tokenomics" class="nav__link">Token</a></li>
-        <li><a href="#gallery" class="nav__link">Gallery</a></li>
+        <li><a href="#characters" class="nav__link">Characters</a></li>
         <li><a href="#community" class="nav__link">Community</a></li>
       </ul>
 
@@ -194,7 +303,7 @@
   <nav class="nav__mobile" id="navMobile">
     <a href="#story" class="nav__link">Story</a>
     <a href="#tokenomics" class="nav__link">Token</a>
-    <a href="#gallery" class="nav__link">Gallery</a>
+    <a href="#characters" class="nav__link">Characters</a>
     <a href="#community" class="nav__link">Community</a>
     <a href="https://pancakeswap.finance" target="_blank" rel="noopener" class="btn btn--primary" style="margin-top:0.5rem">Buy $DOGER</a>
   </nav>
@@ -251,7 +360,7 @@
     </section>
 
     <!-- Character Band -->
-    <div class="char-band" aria-hidden="true">
+    <div class="char-band" id="characters">
       <div class="char-band__track" data-band="0"></div>
     </div>
 
@@ -343,31 +452,9 @@
     </section>
 
     <!-- Character Band 2 -->
-    <div class="char-band" aria-hidden="true">
+    <div class="char-band char-band--alt" aria-hidden="true">
       <div class="char-band__track" data-band="1"></div>
     </div>
-
-    <!-- ===== GALLERY ===== -->
-    <section class="gallery section" id="gallery">
-      <div class="section-bg" data-parallax="0.12">
-        <img src="assets/art_studio_bg.png" alt="" loading="lazy"/>
-      </div>
-      <div class="section-bg-overlay"></div>
-      <div class="grid-overlay"></div>
-
-      <div class="section-content">
-        <div class="gallery__header reveal-up">
-          <p class="section-label">// Fan Art</p>
-          <h2 class="section-title">39 Characters.<br/>Infinite Possibilities.</h2>
-        </div>
-
-        <div class="gallery__grid" id="galleryGrid"></div>
-
-        <div class="gallery__cta reveal-up">
-          <a href="https://t.me/dogereborn" target="_blank" rel="noopener" class="btn btn--primary btn--glow btn--magnetic">Go To Gallery</a>
-        </div>
-      </div>
-    </section>
 
     <!-- ===== COMMUNITY ===== -->
     <section class="community section" id="community">
@@ -410,5 +497,15 @@
   <script src="js/particles.js"></script>
   <script src="js/animations.js"></script>
   <script src="js/app.js"></script>
+
+  <!-- Hide the page loader once everything has loaded (with a safety fallback) -->
+  <script>
+    (function () {
+      var hide = function () { document.body.classList.remove('is-loading'); };
+      if (document.readyState === 'complete') { hide(); }
+      else { window.addEventListener('load', hide); }
+      setTimeout(hide, 6000); /* never let the loader get stuck */
+    })();
+  </script>
 </body>
 </html>

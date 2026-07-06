@@ -24,37 +24,29 @@ const ALL_CHARACTERS = [
   { name: 'Would', file: 'would.jpg' },
 ];
 
-/* ---- Gallery ---- */
-function buildGallery() {
-  const grid = document.getElementById('galleryGrid');
-  if (!grid) return;
+/* ---- Character Bands (mame-style scrolling strips) ----
+   Two "as you scroll" strips, both built from OUR OWN characters. The roster is
+   split so the first band shows the first half and the second band the rest —
+   "some in the first, some in the second".
 
-  ALL_CHARACTERS.forEach((char) => {
-    const item = document.createElement('div');
-    item.className = 'gallery__item';
-    item.innerHTML = `
-      <img src="characters/${char.file}" alt="${char.name}" loading="lazy" />
-      <div class="gallery__item-info">
-        <span class="gallery__item-name">${char.name}</span>
-      </div>`;
-    grid.appendChild(item);
-  });
-}
-
-/* ---- Character Bands ----
    Each track is built as TWO identical halves. The marquee in animations.js
    translates the track by exactly one half and wraps, so the strip is always
-   full — there is never an empty gap at either edge. Each half is 20 items
-   wide, which comfortably exceeds any screen width. */
+   full — there is never an empty gap at either edge. Each half is padded out to
+   comfortably exceed any screen width so the loop stays seamless. */
 function buildCharBands() {
-  const PER_BAND = 20;
-  document.querySelectorAll('.char-band__track').forEach((track, idx) => {
-    const slice = [];
-    for (let i = 0; i < PER_BAND; i++) {
-      /* offset each band so the two rows show different characters */
-      slice.push(ALL_CHARACTERS[(idx * 7 + i) % ALL_CHARACTERS.length]);
-    }
-    const sequence = slice.concat(slice); // two identical halves = seamless loop
+  const tracks = document.querySelectorAll('.char-band__track');
+  const bandCount = tracks.length || 1;
+  const perBand = Math.ceil(ALL_CHARACTERS.length / bandCount);
+
+  tracks.forEach((track, idx) => {
+    let group = ALL_CHARACTERS.slice(idx * perBand, idx * perBand + perBand);
+    if (!group.length) group = ALL_CHARACTERS.slice();
+
+    /* repeat the group until it's wide enough that the marquee never shows a gap */
+    const half = [];
+    while (half.length < 14) half.push(...group);
+
+    const sequence = half.concat(half); // two identical halves = seamless loop
     sequence.forEach((char) => {
       const item = document.createElement('div');
       item.className = 'char-band__item';
@@ -118,7 +110,6 @@ function initLenis() {
 
 /* ---- Boot ---- */
 document.addEventListener('DOMContentLoaded', () => {
-  buildGallery();
   buildCharBands();
 
   const lenis = initLenis();
