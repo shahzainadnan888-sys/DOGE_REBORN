@@ -1,0 +1,300 @@
+/* --- DOGE REBORN CUSTOM STYLES (TAILWIND OVERRIDES & ANIMATIONS) --- */
+
+:root {
+  --gold: #f5a623;
+  --gold-bright: #ffc843;
+  --dark: #0c0b10;
+  --font-bangers: 'Bangers', cursive;
+  --font-marker: 'Permanent Marker', cursive;
+  --font-outfit: 'Outfit', sans-serif;
+}
+
+/* Base resets & custom scrollbar */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: var(--dark); }
+::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 4px; }
+
+html { scroll-behavior: smooth; }
+
+/* ---- TYPOGRAPHY ---- */
+.comic-heading {
+  font-family: var(--font-bangers), cursive;
+  color: #ffffff;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  text-shadow: 4px 4px 0 #000, -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 0 4px 0 #000;
+}
+.comic-heading-gold {
+  font-family: var(--font-bangers), cursive;
+  color: var(--gold-bright);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  text-shadow: 4px 4px 0 #000, -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 0 4px 0 #000;
+}
+.brush-heading {
+  font-family: var(--font-marker), cursive;
+  color: #ffffff;
+  text-shadow: 4px 4px 0 #000, -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 0 4px 0 #000;
+}
+.story-text {
+  font-family: var(--font-marker), cursive;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.9);
+}
+
+/* ---- NAV ---- */
+.nav-link {
+  font-family: var(--font-bangers), cursive;
+  font-size: 1.15rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #fff;
+  text-decoration: none;
+  transition: color 0.2s;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+}
+.nav-link:hover { color: var(--gold-bright); }
+/* Nav goes solid once scrolled past the hero */
+#siteNav.scrolled {
+  background: rgba(12, 11, 16, 0.92);
+  box-shadow: 0 10px 30px -18px #000;
+}
+
+/* ---- BUTTONS ---- */
+.btn-gold {
+  font-family: var(--font-bangers), cursive;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  background: var(--gold-bright);
+  color: #000;
+  border: 3px solid #000;
+  border-radius: 14px;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  box-shadow: 0 5px 0 #000;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.btn-gold:hover { transform: translateY(-2px); box-shadow: 0 7px 0 #000; }
+.btn-gold:active { transform: translateY(2px); box-shadow: 0 2px 0 #000; }
+
+.btn-outline-white {
+  font-family: var(--font-bangers), cursive;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  background: transparent;
+  color: #fff;
+  border: 3px solid rgba(255,255,255,0.5);
+  border-radius: 14px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.btn-outline-white:hover { border-color: #fff; background: rgba(255,255,255,0.08); }
+
+/* ---- SECTION SYSTEM ---- */
+.section-illustrated {
+  position: relative;
+  overflow: hidden;
+  margin-bottom: -2px;
+}
+.section-bg {
+  position: absolute;
+  inset: -8% 0 0 0;
+  z-index: 0;
+  will-change: transform;
+}
+.section-bg img { width: 100%; height: 108%; }
+
+/* ---- HERO LAYERED DEPTH (MAME-style, driven by smooth-scroll engine) ---- */
+/* Extra overscan so the JS zoom/parallax never reveals bg edges. */
+.hero-bg { inset: -10% -6% -8% -6%; }
+.hero-bg img { width: 100%; height: 118%; }
+/* Slow idle "ken-burns" so the city feels alive even at rest.
+   Runs on the <img>; the smooth-scroll engine transforms the wrapper,
+   so the two never fight. */
+.hero-bg > img {
+  animation: hero-kenburns 28s ease-in-out infinite alternate;
+  transform-origin: 60% 42%;
+}
+@keyframes hero-kenburns {
+  0%   { transform: scale(1.02) translate3d(0, 0, 0); }
+  100% { transform: scale(1.09) translate3d(-1.4%, -1%, 0); }
+}
+/* Soft vignette to seat the hero content over the busy city art */
+.hero-vignette {
+  position: absolute; inset: 0; z-index: 1; pointer-events: none;
+  background: radial-gradient(125% 95% at 50% 28%, transparent 52%, rgba(0,0,0,0.42) 100%);
+}
+/* Parallax layers get their own compositing layer for smoothness */
+.hero-float, .hero-parallax { will-change: transform; }
+
+.blend-bottom {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  height: 200px;
+  background: linear-gradient(to bottom, transparent, var(--dark));
+  z-index: 1; pointer-events: none;
+}
+.blend-top {
+  position: absolute; top: 0; left: 0; right: 0;
+  height: 150px;
+  background: linear-gradient(to top, transparent, var(--dark));
+  z-index: 1; pointer-events: none;
+}
+.blend-bottom-hero {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  height: 100px;
+  background: linear-gradient(to bottom, transparent, rgba(0,0,0,0.7));
+  z-index: 1; pointer-events: none;
+}
+
+/* ---- COMIC PANEL STRIPS ---- */
+.comic-strip {
+  display: flex;
+  gap: 6px;
+  width: 100%;
+  padding: 0 4px;
+}
+.comic-panel-frame {
+  flex: 1 1 0;
+  min-width: 0;
+  height: 180px;
+  position: relative;
+  border: 4px solid #000;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 4px 4px 0 #000;
+}
+@media (min-width: 768px) { .comic-panel-frame { height: 240px; } }
+
+.character-comic-panel {
+  border: 4px solid #000 !important;
+  border-radius: 16px !important;
+  box-shadow: 8px 8px 0px #000 !important;
+  overflow: hidden;
+  transform-style: preserve-3d;
+  will-change: transform;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.character-comic-panel img { transform: translateZ(20px); }
+.character-comic-panel:hover {
+  transform: translateY(-4px) scale(1.02) rotate(1deg) !important;
+  box-shadow: 12px 12px 0px #000 !important;
+}
+
+.color-cyan {
+  color: #00f0ff;
+  text-shadow: 4px 4px 0 #000, -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000;
+}
+.color-pink {
+  color: #ff3e96;
+  text-shadow: 4px 4px 0 #000, -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000;
+}
+
+/* ============================================================
+   SCROLL-LINKED CHARACTER BANDS (MAME-style motion)
+   Comic-panel strips of YOUR characters that slide sideways
+   as you scroll. Rows shear in opposite directions.
+   ============================================================ */
+.band-wrap {
+  position: relative;
+  background: var(--dark);
+  padding: 34px 0;
+  overflow: hidden;
+  z-index: 5;
+}
+.band-wrap--tight { padding: 20px 0; }
+.band {
+  display: flex;
+  gap: 10px;
+  width: max-content;
+  padding: 4px 0;
+  will-change: transform;
+}
+.band--a { transform: translateX(-25%) rotate(-2.5deg); animation: drift-l 80s linear infinite; }
+.band--b { transform: translateX(-40%) rotate(-2.5deg); margin-top: 10px; animation: drift-r 80s linear infinite; }
+.band--c { transform: translateX(-32%) rotate(2deg); animation: drift-l 90s linear infinite; }
+@keyframes drift-l { from { transform: translateX(-22%) rotate(-2.5deg); } to { transform: translateX(-30%) rotate(-2.5deg); } }
+@keyframes drift-r { from { transform: translateX(-42%) rotate(-2.5deg); } to { transform: translateX(-34%) rotate(-2.5deg); } }
+.band-wrap.scrubbing .band { animation: none; }
+.band__panel {
+  flex: 0 0 auto;
+  width: 200px;
+  height: 130px;
+  border: 4px solid #000;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 5px 5px 0 #000;
+}
+.band__panel img { width: 100%; height: 100%; object-fit: cover; }
+@media (max-width: 640px) { .band__panel { width: 150px; height: 100px; } }
+
+/* ===== ADVANCED UI/UX ANIMATIONS & EFFECTS ===== */
+
+/* Scroll progress bar */
+.scroll-indicator {
+  position: fixed; top: 0; left: 0;
+  height: 4px; width: 0;
+  background: linear-gradient(90deg, var(--gold-bright), #ff3e96, #00f0ff);
+  z-index: 1000;
+  transition: width 0.1s linear;
+}
+
+/* Scroll reveal states */
+.reveal {
+  opacity: 0; transform: translateY(40px);
+  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.reveal.visible { opacity: 1; transform: translateY(0); }
+.reveal-left {
+  opacity: 0; transform: translateX(-50px);
+  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.reveal-left.visible { opacity: 1; transform: translateX(0); }
+.reveal-right {
+  opacity: 0; transform: translateX(50px);
+  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.reveal-right.visible { opacity: 1; transform: translateX(0); }
+
+/* Floating animation styles */
+@keyframes float-gentle { 0%, 100% { transform: translateY(0) rotate(-2deg); } 50% { transform: translateY(-10px) rotate(-1deg); } }
+@keyframes float-sway { 0%, 100% { transform: translateY(0) rotate(2.5deg); } 50% { transform: translateY(-12px) rotate(4deg); } }
+@keyframes float-panel-1 { 0%, 100% { transform: translateY(0) rotate(1deg); } 50% { transform: translateY(-8px) rotate(-1deg); } }
+@keyframes float-panel-2 { 0%, 100% { transform: translateY(0) rotate(-3deg); } 50% { transform: translateY(-6px) rotate(-1.5deg); } }
+
+.float-hero-card { animation: float-gentle 6s ease-in-out infinite; }
+.float-story-card { animation: float-sway 5.5s ease-in-out infinite; }
+.float-token-1 { animation: float-panel-1 5s ease-in-out infinite; }
+.float-token-2 { animation: float-panel-2 4.5s ease-in-out infinite; }
+
+/* Floating firefly particles */
+@keyframes particle-drift {
+  0% { transform: translateY(0) translateX(0); opacity: 0; }
+  15% { opacity: 0.6; }
+  85% { opacity: 0.6; }
+  100% { transform: translateY(-100px) translateX(25px); opacity: 0; }
+}
+.fireflies-container { position: absolute; inset: 0; z-index: 1; pointer-events: none; overflow: hidden; }
+.firefly {
+  position: absolute; border-radius: 50%;
+  background: var(--gold-bright);
+  box-shadow: 0 0 8px var(--gold-bright);
+  pointer-events: none;
+  animation: particle-drift linear infinite;
+  z-index: 1;
+}
+
+/* Cursor parallax container */
+.parallax-wrap { perspective: 1000px; transform-style: preserve-3d; }
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  * { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+  .firefly { display: none; }
+  html { scroll-behavior: auto; }
+}

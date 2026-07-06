@@ -1,0 +1,414 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+  <title>Doge Reborn — The Last Doge</title>
+  <meta name="description" content="39 characters. Infinite possibilities. Doge Reborn carries the OG meme spirit into a new generation. Built on BNB Chain. Zero tax."/>
+  <meta name="theme-color" content="#050810"/>
+
+  <link rel="icon" type="image/png" href="assets/doge-logo.png"/>
+
+  <!-- Theme (inline to prevent flash) -->
+  <script src="js/theme.js"></script>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="css/theme.css"/>
+  <link rel="stylesheet" href="css/main.css"/>
+  <link rel="stylesheet" href="css/components.css"/>
+  <link rel="stylesheet" href="css/sections.css"/>
+
+  <!-- Hero background motion + creative holographic coin (kept here in index.html) -->
+  <style>
+    /* ===== Living hero background: slow, smooth cinematic drift ===== */
+    .hero__bg-layer img {
+      animation: hero-bg-drift 34s ease-in-out infinite alternate;
+      will-change: transform;
+    }
+    @keyframes hero-bg-drift {
+      0%   { transform: scale(1.06) translate3d(0, 0, 0); }
+      50%  { transform: scale(1.16) translate3d(-2.2%, -1.6%, 0); }
+      100% { transform: scale(1.09) translate3d(2.2%, 1.1%, 0); }
+    }
+
+    /* ===== Creative hero emblem: holographic Doge coin with orbiting rings ===== */
+    .hero__coin-stage {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      perspective: 1000px;
+      animation: coin-bob 6s ease-in-out infinite;
+    }
+    .hero__coin-stage > * { grid-area: 1 / 1; }
+
+    @keyframes coin-bob {
+      0%, 100% { transform: translateY(0); }
+      50%      { transform: translateY(-18px); }
+    }
+
+    /* Soft pulsing aura behind the coin */
+    .hero__coin-glow {
+      width: 82%;
+      aspect-ratio: 1;
+      border-radius: 50%;
+      background: radial-gradient(circle, var(--glow-cyan) 0%, rgba(168, 85, 247, 0.30) 42%, transparent 70%);
+      filter: blur(28px);
+      animation: coin-glow 4.5s ease-in-out infinite;
+    }
+    @keyframes coin-glow {
+      0%, 100% { opacity: 0.55; transform: scale(1); }
+      50%      { opacity: 0.95; transform: scale(1.12); }
+    }
+
+    /* Orbital rings on tilted planes, each carrying a glowing node */
+    .hero__coin-orbit {
+      width: 98%;
+      aspect-ratio: 1;
+      border-radius: 50%;
+      border: 1px solid rgba(0, 229, 255, 0.28);
+      transform-style: preserve-3d;
+    }
+    .hero__coin-orbit::before {
+      content: '';
+      position: absolute;
+      top: -5px;
+      left: 50%;
+      width: 10px;
+      height: 10px;
+      margin-left: -5px;
+      border-radius: 50%;
+      background: var(--accent-cyan);
+      box-shadow: 0 0 14px var(--glow-cyan);
+    }
+    .hero__coin-orbit--1 { animation: coin-orbit-1 13s linear infinite; }
+    .hero__coin-orbit--2 {
+      width: 112%;
+      border-color: rgba(168, 85, 247, 0.32);
+      animation: coin-orbit-2 18s linear infinite;
+    }
+    .hero__coin-orbit--2::before { background: var(--accent-purple); box-shadow: 0 0 14px var(--glow-purple); }
+    .hero__coin-orbit--3 {
+      width: 86%;
+      border-style: dashed;
+      border-color: rgba(255, 200, 67, 0.30);
+      animation: coin-orbit-3 24s linear infinite reverse;
+    }
+    .hero__coin-orbit--3::before { background: var(--accent-gold); box-shadow: 0 0 14px var(--glow-gold); }
+
+    @keyframes coin-orbit-1 { from { transform: rotateX(74deg) rotateZ(0deg); }               to { transform: rotateX(74deg) rotateZ(360deg); } }
+    @keyframes coin-orbit-2 { from { transform: rotateX(66deg) rotateY(56deg) rotateZ(0deg); } to { transform: rotateX(66deg) rotateY(56deg) rotateZ(360deg); } }
+    @keyframes coin-orbit-3 { from { transform: rotateX(82deg) rotateZ(0deg); }               to { transform: rotateX(82deg) rotateZ(360deg); } }
+
+    /* The coin itself — the Doge logo, gently swaying in 3D like a floating token */
+    .hero__coin {
+      position: relative;
+      width: 60%;
+      aspect-ratio: 1;
+      border-radius: 50%;
+      animation: coin-sway 7s ease-in-out infinite;
+      transform-style: preserve-3d;
+    }
+    @keyframes coin-sway {
+      0%, 100% { transform: rotateY(-16deg) rotateX(5deg); }
+      50%      { transform: rotateY(16deg)  rotateX(-3deg); }
+    }
+
+    .hero__coin-face {
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      overflow: hidden;
+      border: 3px solid rgba(0, 229, 255, 0.55);
+      box-shadow:
+        0 0 0 6px rgba(0, 229, 255, 0.08),
+        0 0 45px var(--glow-cyan),
+        0 24px 60px rgba(0, 0, 0, 0.55),
+        inset 0 0 34px rgba(0, 0, 0, 0.5);
+      background: var(--bg-card);
+    }
+    .hero__coin-face img { width: 100%; height: 100%; object-fit: cover; }
+
+    /* Light sweep across the coin face */
+    .hero__coin-face::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      background: linear-gradient(115deg, transparent 42%, rgba(255, 255, 255, 0.40) 50%, transparent 58%);
+      transform: translateX(-130%);
+      animation: coin-shine 5.5s ease-in-out infinite;
+    }
+    @keyframes coin-shine {
+      0%, 55%   { transform: translateX(-130%); }
+      80%, 100% { transform: translateX(130%); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .hero__bg-layer img,
+      .hero__coin-stage,
+      .hero__coin,
+      .hero__coin-glow,
+      .hero__coin-orbit,
+      .hero__coin-face::after { animation: none; }
+    }
+  </style>
+</head>
+<body id="top">
+
+  <!-- Global Overlays -->
+  <div class="noise-overlay" aria-hidden="true"></div>
+  <div class="scroll-progress" id="scrollProgress"></div>
+
+  <!-- ===== NAVBAR ===== -->
+  <header class="nav" id="siteNav">
+    <div class="nav__inner">
+      <a href="#top" class="nav__brand">
+        <img src="assets/logo.jpeg" alt="Doge Reborn" class="nav__logo" data-logo-easter width="48" height="48"/>
+        <span class="nav__brand-text">Doge Reborn</span>
+      </a>
+
+      <ul class="nav__links">
+        <li><a href="#story" class="nav__link">Story</a></li>
+        <li><a href="#tokenomics" class="nav__link">Token</a></li>
+        <li><a href="#gallery" class="nav__link">Gallery</a></li>
+        <li><a href="#community" class="nav__link">Community</a></li>
+      </ul>
+
+      <div class="nav__actions">
+        <a href="https://pancakeswap.finance" target="_blank" rel="noopener" class="btn btn--primary btn--glow btn--magnetic">Buy</a>
+
+        <button class="nav__burger" id="navBurger" aria-label="Menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile Nav -->
+  <nav class="nav__mobile" id="navMobile">
+    <a href="#story" class="nav__link">Story</a>
+    <a href="#tokenomics" class="nav__link">Token</a>
+    <a href="#gallery" class="nav__link">Gallery</a>
+    <a href="#community" class="nav__link">Community</a>
+    <a href="https://pancakeswap.finance" target="_blank" rel="noopener" class="btn btn--primary" style="margin-top:0.5rem">Buy $DOGER</a>
+  </nav>
+
+  <main>
+
+    <!-- ===== HERO ===== -->
+    <section class="hero section" id="hero">
+      <div class="hero__bg-layer" data-parallax="0.3">
+        <img src="assets/hero_city_bg.png" alt="" data-preload loading="eager"/>
+      </div>
+      <div class="hero__fog"></div>
+      <div class="hero__neon-rays"></div>
+      <div class="grid-overlay"></div>
+      <canvas class="hero__particles" id="heroParticles" aria-hidden="true"></canvas>
+
+      <div class="hero__content">
+        <div class="hero__left">
+          <h1 class="hero__title">
+            <span class="hero__title-line">Doge</span>
+            <span class="hero__title-line hero__title-line--accent">Reborn</span>
+          </h1>
+
+          <p class="hero__subtitle">The <em>Last</em> Doge</p>
+
+          <div class="hero__ctas">
+            <a href="https://pancakeswap.finance" target="_blank" rel="noopener" class="btn btn--primary btn--glow btn--magnetic">Buy Now</a>
+            <a href="https://dexscreener.com" target="_blank" rel="noopener" class="btn btn--secondary btn--magnetic">View Chart</a>
+            <a href="#community" class="btn btn--ghost btn--magnetic">Join Community</a>
+          </div>
+        </div>
+
+        <div class="hero__right">
+          <div class="hero__mascot-wrap">
+            <div class="hero__coin-stage" aria-label="Doge Reborn holographic coin">
+              <div class="hero__coin-glow"></div>
+              <div class="hero__coin-orbit hero__coin-orbit--1"></div>
+              <div class="hero__coin-orbit hero__coin-orbit--2"></div>
+              <div class="hero__coin-orbit hero__coin-orbit--3"></div>
+              <div class="hero__coin">
+                <div class="hero__coin-face">
+                  <img src="assets/logo.jpeg" alt="Doge Reborn" data-preload width="420" height="420"/>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero__scroll-hint">
+        <span>Scroll</span>
+        <div class="hero__scroll-line"></div>
+      </div>
+    </section>
+
+    <!-- Character Band -->
+    <div class="char-band" aria-hidden="true">
+      <div class="char-band__track" data-band="0"></div>
+    </div>
+
+    <!-- ===== STORY ===== -->
+    <section class="story section" id="story">
+      <div class="section-bg" data-parallax="0.2">
+        <img src="assets/doge_hacker_lab.png" alt="" loading="lazy"/>
+      </div>
+      <div class="section-bg-overlay"></div>
+      <div class="story__flicker"></div>
+      <div class="grid-overlay"></div>
+
+      <div class="section-content">
+        <div class="story__grid">
+          <div class="reveal-left">
+            <p class="section-label">// Origin Protocol</p>
+            <h2 class="section-title">The Story</h2>
+
+            <div class="terminal" style="margin-top:2rem; position:relative">
+              <div class="terminal__scanline"></div>
+              <div class="terminal__header">
+                <span class="terminal__dot terminal__dot--red"></span>
+                <span class="terminal__dot terminal__dot--yellow"></span>
+                <span class="terminal__dot terminal__dot--green"></span>
+                <span class="terminal__title">doge_reborn.exe — access granted</span>
+              </div>
+              <div class="terminal__body">
+                <span class="terminal__prompt">&gt;</span>
+                <span id="terminalText"></span>
+              </div>
+            </div>
+          </div>
+
+          <div class="story__visual reveal-right">
+            <div class="story__hologram">
+              <div class="story__holo-ring"></div>
+              <img src="assets/doge_mascot.png" alt="Doge Hologram" class="story__char" loading="lazy"/>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== TOKENOMICS ===== -->
+    <section class="tokenomics section" id="tokenomics">
+      <div class="section-bg" data-parallax="0.15">
+        <img src="assets/cyber_portal_bg.png" alt="" loading="lazy"/>
+      </div>
+      <div class="section-bg-overlay"></div>
+      <div class="grid-overlay"></div>
+
+      <div class="section-content">
+        <div class="tokenomics__header reveal-up">
+          <p class="section-label">// Token Allocation</p>
+          <h2 class="section-title">Tokenomics</h2>
+        </div>
+
+        <div class="tokenomics__grid">
+          <div class="token-card token-card--gold card-3d">
+            <div class="token-card__value" data-target="50">0%</div>
+            <div class="token-card__label">Presale</div>
+            <div class="token-card__bar"><div class="token-card__bar-fill"></div></div>
+          </div>
+          <div class="token-card token-card--cyan card-3d">
+            <div class="token-card__value" data-target="25">0%</div>
+            <div class="token-card__label">Liquidity</div>
+            <div class="token-card__bar"><div class="token-card__bar-fill"></div></div>
+          </div>
+          <div class="token-card token-card--pink card-3d">
+            <div class="token-card__value" data-target="15">0%</div>
+            <div class="token-card__label">Rewards</div>
+            <div class="token-card__bar"><div class="token-card__bar-fill"></div></div>
+          </div>
+          <div class="token-card token-card--orange card-3d">
+            <div class="token-card__value" data-target="10">0%</div>
+            <div class="token-card__label">Marketing</div>
+            <div class="token-card__bar"><div class="token-card__bar-fill"></div></div>
+          </div>
+        </div>
+
+        <p class="tokenomics__supply reveal-up">
+          Total Supply: <strong>1,000,000,000</strong> — Zero Tax
+        </p>
+
+        <div class="tokenomics__actions reveal-up">
+          <button class="btn btn--primary btn--magnetic" id="copyCA">Copy Contract Address</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Character Band 2 -->
+    <div class="char-band" aria-hidden="true">
+      <div class="char-band__track" data-band="1"></div>
+    </div>
+
+    <!-- ===== GALLERY ===== -->
+    <section class="gallery section" id="gallery">
+      <div class="section-bg" data-parallax="0.12">
+        <img src="assets/art_studio_bg.png" alt="" loading="lazy"/>
+      </div>
+      <div class="section-bg-overlay"></div>
+      <div class="grid-overlay"></div>
+
+      <div class="section-content">
+        <div class="gallery__header reveal-up">
+          <p class="section-label">// Fan Art</p>
+          <h2 class="section-title">39 Characters.<br/>Infinite Possibilities.</h2>
+        </div>
+
+        <div class="gallery__grid" id="galleryGrid"></div>
+
+        <div class="gallery__cta reveal-up">
+          <a href="https://t.me/dogereborn" target="_blank" rel="noopener" class="btn btn--primary btn--glow btn--magnetic">Go To Gallery</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== COMMUNITY ===== -->
+    <section class="community section" id="community">
+      <div class="section-bg" data-parallax="0.18">
+        <img src="assets/hero_city_bg.png" alt="" loading="lazy"/>
+      </div>
+      <div class="section-bg-overlay"></div>
+      <canvas class="community__particles" id="communityParticles" aria-hidden="true"></canvas>
+      <div class="grid-overlay"></div>
+
+      <div class="section-content community__inner">
+        <img src="assets/logo.jpeg" alt="Doge Reborn" class="community__logo reveal-scale" data-logo-easter width="80" height="80"/>
+        <h2 class="community__title reveal-up">Join The Pack</h2>
+        <p class="community__subtitle reveal-up">The revolution starts with you. Connect with the community.</p>
+
+        <div class="community__buttons">
+          <a href="https://pancakeswap.finance" target="_blank" rel="noopener" class="btn btn--primary btn--glow community__btn btn--magnetic">Buy Now</a>
+          <a href="https://dexscreener.com" target="_blank" rel="noopener" class="btn btn--primary btn--glow community__btn btn--magnetic">DexScreener</a>
+          <a href="https://twitter.com" target="_blank" rel="noopener" class="btn btn--secondary community__btn btn--magnetic">Twitter / X</a>
+          <a href="https://telegram.org" target="_blank" rel="noopener" class="btn btn--secondary community__btn btn--magnetic">Telegram</a>
+          <a href="https://www.dextools.io" target="_blank" rel="noopener" class="btn btn--ghost community__btn community__btn--wide btn--magnetic">View on DEXTools</a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="footer">
+    <img src="assets/logo.jpeg" alt="" width="36" height="36" style="border-radius:50%;margin:0 auto 1rem;display:block;opacity:0.6" loading="lazy"/>
+    <p class="footer__text">&copy; 2026 Doge Reborn. Memes never die.</p>
+  </footer>
+
+  <!-- Libraries -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.18/dist/lenis.min.js"></script>
+
+  <!-- App (classic scripts so the site works when opened directly via file://) -->
+  <script src="js/particles.js"></script>
+  <script src="js/animations.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

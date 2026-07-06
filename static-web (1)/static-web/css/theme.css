@@ -1,0 +1,123 @@
+/* ============================================================
+   DOGE REBORN — Theme System (Dark / Light)
+   ============================================================ */
+
+[data-theme="dark"] {
+  --bg-primary: #050810;
+  --bg-secondary: #0a0f1e;
+  --bg-surface: rgba(12, 18, 36, 0.72);
+  --bg-card: rgba(14, 22, 42, 0.85);
+  --bg-glass: rgba(8, 14, 28, 0.55);
+
+  --text-primary: #f0f4ff;
+  --text-secondary: rgba(200, 210, 240, 0.75);
+  --text-muted: rgba(160, 175, 210, 0.55);
+
+  --accent-orange: #ff8c2a;
+  --accent-gold: #ffc843;
+  --accent-cyan: #00e5ff;
+  --accent-purple: #a855f7;
+  --accent-pink: #ff3e96;
+  --accent-neon: #3b82f6;
+
+  --glow-orange: rgba(255, 140, 42, 0.55);
+  --glow-cyan: rgba(0, 229, 255, 0.45);
+  --glow-gold: rgba(255, 200, 67, 0.5);
+  --glow-purple: rgba(168, 85, 247, 0.4);
+
+  --border-subtle: rgba(0, 229, 255, 0.12);
+  --border-glow: rgba(0, 229, 255, 0.35);
+
+  --shadow-card: 0 8px 32px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(0, 229, 255, 0.08);
+  --shadow-btn: 0 0 24px var(--glow-orange);
+
+  --grid-color: rgba(0, 229, 255, 0.04);
+  --noise-opacity: 0.035;
+  --fog-color: rgba(5, 8, 16, 0.6);
+  --overlay: rgba(5, 8, 16, 0.55);
+
+  --nav-bg: rgba(5, 8, 16, 0.45);
+  --nav-bg-scrolled: rgba(5, 8, 16, 0.88);
+  --cursor-glow: rgba(0, 229, 255, 0.6);
+  --progress-gradient: linear-gradient(90deg, var(--accent-gold), var(--accent-cyan), var(--accent-purple));
+
+  --btn-primary-bg: linear-gradient(135deg, var(--accent-orange), var(--accent-gold));
+  --btn-primary-text: #0a0a0a;
+  --btn-secondary-bg: transparent;
+  --btn-secondary-border: rgba(0, 229, 255, 0.5);
+  --btn-secondary-text: var(--accent-cyan);
+
+  --terminal-bg: rgba(0, 8, 20, 0.85);
+  --terminal-border: rgba(0, 229, 255, 0.25);
+  --terminal-text: #00ff88;
+  --terminal-cursor: var(--accent-cyan);
+}
+
+[data-theme="light"] {
+  --bg-primary: #f4f6fb;
+  --bg-secondary: #e8ecf4;
+  --bg-surface: rgba(255, 255, 255, 0.82);
+  --bg-card: rgba(255, 255, 255, 0.92);
+  --bg-glass: rgba(255, 255, 255, 0.65);
+
+  --text-primary: #0f1729;
+  --text-secondary: rgba(30, 45, 80, 0.8);
+  --text-muted: rgba(60, 75, 110, 0.55);
+
+  --accent-orange: #e67a00;
+  --accent-gold: #d4920a;
+  --accent-cyan: #0891b2;
+  --accent-purple: #7c3aed;
+  --accent-pink: #db2777;
+  --accent-neon: #2563eb;
+
+  --glow-orange: rgba(230, 122, 0, 0.25);
+  --glow-cyan: rgba(8, 145, 178, 0.2);
+  --glow-gold: rgba(212, 146, 10, 0.3);
+  --glow-purple: rgba(124, 58, 237, 0.2);
+
+  --border-subtle: rgba(15, 23, 41, 0.08);
+  --border-glow: rgba(230, 122, 0, 0.35);
+
+  --shadow-card: 0 8px 32px rgba(15, 23, 41, 0.08), 0 0 0 1px rgba(15, 23, 41, 0.06);
+  --shadow-btn: 0 4px 20px var(--glow-orange);
+
+  --grid-color: rgba(15, 23, 41, 0.04);
+  --noise-opacity: 0.02;
+  --fog-color: rgba(244, 246, 251, 0.7);
+  --overlay: rgba(244, 246, 251, 0.65);
+
+  --nav-bg: rgba(255, 255, 255, 0.55);
+  --nav-bg-scrolled: rgba(255, 255, 255, 0.92);
+  --cursor-glow: rgba(230, 122, 0, 0.45);
+  --progress-gradient: linear-gradient(90deg, var(--accent-gold), var(--accent-orange), var(--accent-purple));
+
+  --btn-primary-bg: linear-gradient(135deg, var(--accent-orange), var(--accent-gold));
+  --btn-primary-text: #ffffff;
+  --btn-secondary-bg: transparent;
+  --btn-secondary-border: rgba(230, 122, 0, 0.45);
+  --btn-secondary-text: var(--accent-orange);
+
+  --terminal-bg: rgba(255, 255, 255, 0.95);
+  --terminal-border: rgba(8, 145, 178, 0.3);
+  --terminal-text: #0d6e4f;
+  --terminal-cursor: var(--accent-cyan);
+}
+
+/* Smooth theme transition */
+html {
+  transition: background-color 0.4s ease, color 0.4s ease;
+}
+
+body,
+.nav,
+.btn,
+.token-card,
+.terminal,
+.section-bg-overlay {
+  transition:
+    background-color 0.4s ease,
+    border-color 0.4s ease,
+    box-shadow 0.4s ease,
+    color 0.4s ease;
+}
