@@ -25,7 +25,10 @@ class ParticleField {
   resize() {
     const parent = this.canvas.parentElement;
     if (!parent) return;
-    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    /* Cap at 1.5 rather than 2: on a HiDPI screen a full-viewport canvas at
+       2× has 4× the pixels to clear+fill every frame, for no visible gain on
+       soft particles. 1.5 roughly halves that fill cost. */
+    const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
     this.canvas.width = parent.clientWidth * dpr;
     this.canvas.height = parent.clientHeight * dpr;
     this.canvas.style.width = `${parent.clientWidth}px`;
@@ -134,9 +137,11 @@ function initParticles() {
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return [];
 
   const fields = [];
+  /* Fewer particles => a much cheaper O(n²) link pass (40 pts ≈ 780 pair
+     checks/frame vs 1225 at 50). Still reads as a dense field. */
   const configs = [
-    { id: 'heroParticles', count: 50, connectDistance: 100 },
-    { id: 'communityParticles', count: 30, connectDistance: 80 },
+    { id: 'heroParticles', count: 38, connectDistance: 100 },
+    { id: 'communityParticles', count: 24, connectDistance: 80 },
   ];
 
   configs.forEach((cfg) => {
@@ -144,8 +149,35 @@ function initParticles() {
     if (!canvas) return;
     const field = new ParticleField(canvas, cfg);
     field.init();
-    field.start();
     fields.push(field);
+
+    /* Only animate a field while its canvas is actually on screen. Off-screen
+       the loop (including the hero's O(n²) link pass) would otherwise keep
+       burning frames forever, stealing time from the scroll. */
+    field._visible = false;
+    if ('IntersectionObserver' in window) {
+      const io = new IntersectionObserver(
+        (entries) => {
+          const on = entries[0].isIntersecting;
+          field._visible = on;
+          if (on && !document.hidden) field.start();
+          else field.stop();
+        },
+        { threshold: 0.01 }
+      );
+      io.observe(canvas);
+    } else {
+      field._visible = true;
+      field.start();
+    }
+  });
+
+  /* Pause every field when the tab is backgrounded; resume the on-screen ones. */
+  document.addEventListener('visibilitychange', () => {
+    fields.forEach((f) => {
+      if (document.hidden) f.stop();
+      else if (f._visible) f.start();
+    });
   });
 
   return fields;

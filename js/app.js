@@ -116,6 +116,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initNav(lenis);
   initParticles();
   initAnimations(lenis);
+  initIdlePause();
   initTerminal();
   initTokenCounters();
   /* Magnetic cursor-follow disabled — buttons stay put, hover effects only. */

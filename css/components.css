@@ -87,8 +87,11 @@
   align-items: center;
   padding: 0 clamp(1rem, 3vw, 2.5rem);
   background: var(--nav-bg);
-  backdrop-filter: blur(20px) saturate(1.4);
-  -webkit-backdrop-filter: blur(20px) saturate(1.4);
+  /* The nav is a full-width fixed bar, so its backdrop-filter is re-blurred on
+     every single scroll frame. A 20px radius made that the heaviest sustained
+     cost while scrolling; 10px keeps the glass look for a fraction of the work. */
+  backdrop-filter: blur(10px) saturate(1.2);
+  -webkit-backdrop-filter: blur(10px) saturate(1.2);
   border-bottom: 1px solid var(--border-subtle);
   transition: background 0.4s ease, box-shadow 0.4s ease;
 }
@@ -404,10 +407,10 @@
   border: 1px solid var(--border-subtle);
   border-radius: 16px;
   box-shadow: var(--shadow-card);
-  backdrop-filter: blur(12px);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
   transition: transform 0.3s var(--ease-out-expo), box-shadow 0.3s;
   transform-style: preserve-3d;
-  will-change: transform;
 }
 
 .card-3d:hover {

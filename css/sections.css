@@ -304,7 +304,8 @@
   border-radius: 12px;
   overflow: hidden;
   box-shadow: var(--shadow-card), 0 0 40px var(--glow-cyan);
-  backdrop-filter: blur(16px);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }
 
 .terminal__header {
@@ -406,9 +407,12 @@
   animation: hologram-float 5s ease-in-out infinite;
 }
 
+/* Animate transform only — animating the drop-shadow filter forced a full
+   repaint every frame. The static glow on .story__char stays; only the float
+   moves, which is GPU-composited and free. */
 @keyframes hologram-float {
-  0%, 100% { transform: translateY(0); filter: drop-shadow(0 0 20px var(--glow-cyan)); }
-  50% { transform: translateY(-12px); filter: drop-shadow(0 0 40px var(--glow-cyan)); }
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-12px); }
 }
 
 .story__holo-ring {
@@ -499,7 +503,8 @@
   text-align: center;
   position: relative;
   overflow: hidden;
-  backdrop-filter: blur(12px);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
   transition: transform 0.4s var(--ease-out-expo), box-shadow 0.4s, border-color 0.4s;
 }
 

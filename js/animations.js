@@ -247,10 +247,13 @@ function initAnimations(lenis) {
     });
   }
 
-  /* ---- Recalculate trigger positions once images/fonts finish loading ----
-     Heavy images below the fold shift the layout after init; without this the
-     Story and Gallery reveals can keep their wrong start positions and never
-     fire, leaving those sections stuck hidden. */
+  /* ---- Recalculate trigger positions when layout settles ----
+     Heavy images below the fold can shift layout after init. We only need to
+     recompute a couple of times — NOT on every one of the 40+ lazy character
+     images as they stream in while you scroll. Refreshing mid-scroll forces a
+     synchronous, full-page trigger recompute, which is exactly the "sudden
+     jerk" the page had. So we refresh once shortly after init, once on full
+     load, and (debounced) on resize — and never again during scrolling. */
   let refreshTimer;
   const scheduleRefresh = () => {
     clearTimeout(refreshTimer);
@@ -258,9 +261,28 @@ function initAnimations(lenis) {
   };
   scheduleRefresh();
   window.addEventListener('load', scheduleRefresh);
-  document.querySelectorAll('img').forEach((img) => {
-    if (!img.complete) img.addEventListener('load', scheduleRefresh, { once: true });
+
+  let resizeTimer;
+  window.addEventListener('resize', () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(() => ScrollTrigger.refresh(), 250);
   });
+}
+
+/* Pause a section's decorative CSS animations whenever it is scrolled off
+   screen, so the browser isn't compositing the hero's god-rays / haze / neon
+   layers (or any other section's effects) while you're looking elsewhere.
+   Runs independently of GSAP so it works even if the animation library fails. */
+function initIdlePause() {
+  if (!('IntersectionObserver' in window)) return;
+  const sections = document.querySelectorAll('.hero, .story, .tokenomics, .community');
+  const io = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((e) => e.target.classList.toggle('is-idle', !e.isIntersecting));
+    },
+    { rootMargin: '120px 0px' }
+  );
+  sections.forEach((s) => io.observe(s));
 }
 
 /* Terminal typing effect */

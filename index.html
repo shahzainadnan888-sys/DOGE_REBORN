@@ -25,6 +25,40 @@
 
   <!-- Hero background motion + creative holographic coin (kept here in index.html) -->
   <style>
+    /* ============================================================
+       SCROLL-PERFORMANCE / ANTI-JANK
+       Promote every continuously-animated or GSAP-driven layer onto
+       its OWN GPU compositor layer. Then their motion is composited
+       instead of repainting the hero content beneath them, so the
+       page scrolls without the stutter/jerk it had before.
+       ============================================================ */
+    .hero__sun,
+    .hero__godrays,
+    .hero__haze,
+    .hero__mascot-aura,
+    .hero .hero__mascot,
+    .hero__bg-layer,
+    .hero__mascot-wrap,
+    .hero__left,
+    .char-band__track {
+      will-change: transform;
+      transform: translateZ(0);
+      backface-visibility: hidden;
+    }
+
+    /* Pause a section's decorative CSS animations while it is scrolled out of
+       view. There's no point spending GPU compositing the hero's god-rays,
+       haze, sun and neon-rays while the user is reading the community section.
+       An IntersectionObserver toggles `.is-idle` (see initIdlePause in
+       animations.js). Scroll-driven effects (marquee, parallax) are unaffected
+       because they're JS transforms, not CSS animations. */
+    .is-idle,
+    .is-idle *,
+    .is-idle *::before,
+    .is-idle *::after {
+      animation-play-state: paused !important;
+    }
+
     /* ===== Living hero background: very slow cinematic Ken-Burns drift ===== */
     .hero__bg-layer img {
       animation: hero-bg-drift 60s ease-in-out infinite alternate;
